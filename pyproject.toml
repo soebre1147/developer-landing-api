@@ -32,3 +32,5 @@ addopts = "-q"
 target-version = "py39"
 line-length = 110
 
+[tool.ruff.lint]
+ignore = ["UP045"]
