@@ -1,0 +1,83 @@
+{
+  "info": {
+    "name": "Developer Landing API",
+    "description": "Проверка полного цикла формы обратной связи: validation → AI/fallback → notifications → metrics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "contactId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/health"
+      }
+    },
+    {
+      "name": "Create contact",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
+              "pm.test('contact is accepted', function () { pm.expect(pm.response.json().status).to.eql('received'); });",
+              "pm.collectionVariables.set('contactId', pm.response.json().id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Анна Смирнова\",\n  \"phone\": \"+7 999 123-45-67\",\n  \"email\": \"anna@example.com\",\n  \"comment\": \"Нужна интеграция формы обратной связи с AI-анализом обращений.\"\n}"
+        },
+        "url": "{{baseUrl}}/api/contact"
+      }
+    },
+    {
+      "name": "Metrics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/metrics"
+      }
+    },
+    {
+      "name": "Validation error",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"A\",\n  \"phone\": \"bad\",\n  \"email\": \"not-email\",\n  \"comment\": \"x\"\n}"
+        },
+        "url": "{{baseUrl}}/api/contact"
+      }
+    }
+  ]
+}
+
