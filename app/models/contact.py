@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
@@ -48,12 +48,12 @@ class ContactRequest(BaseModel):
 class AIAnalysis(BaseModel):
     available: bool
     provider: str
-    sentiment: Literal["positive", "neutral", "negative"] | None = None
-    intent: str | None = None
-    summary: str | None = None
-    suggested_reply: str | None = None
+    sentiment: Optional[Literal["positive", "neutral", "negative"]] = None
+    intent: Optional[str] = None
+    summary: Optional[str] = None
+    suggested_reply: Optional[str] = None
     fallback: bool = False
-    error: str | None = None
+    error: Optional[str] = None
 
 
 class DeliveryStatus(BaseModel):
@@ -83,4 +83,4 @@ class MetricsResponse(BaseModel):
     failed_notifications: int
     ai_available: int
     ai_fallback: int
-    updated_at: datetime | None = None
+    updated_at: Optional[datetime] = None

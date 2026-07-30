@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import time
 from contextlib import asynccontextmanager
+from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
@@ -26,7 +27,7 @@ def error_response(code: str, message: str, details=None) -> dict:
     return {"error": {"code": code, "message": message, "details": details}}
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(settings: Optional[Settings] = None) -> FastAPI:
     settings = settings or get_settings()
     settings.data_dir.mkdir(parents=True, exist_ok=True)
     configure_logging(settings.data_dir, settings.log_level)

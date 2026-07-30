@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
+from typing import Optional
 
 from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -33,17 +34,17 @@ class Settings(BaseSettings):
     email_backend: str = "console"
     email_from: str = "no-reply@example.com"
     owner_email: str = "owner@example.com"
-    smtp_host: str | None = None
+    smtp_host: Optional[str] = None
     smtp_port: int = 587
-    smtp_username: str | None = None
-    smtp_password: SecretStr | None = None
+    smtp_username: Optional[str] = None
+    smtp_password: Optional[SecretStr] = None
     smtp_use_tls: bool = True
 
     ai_enabled: bool = True
     ai_provider: str = "openai"
     ai_model: str = "gpt-4o-mini"
     ai_base_url: str = "https://api.openai.com/v1"
-    openai_api_key: SecretStr | None = None
+    openai_api_key: Optional[SecretStr] = None
     ai_timeout_seconds: float = 12.0
 
     @field_validator("email_backend")
